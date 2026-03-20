@@ -2,947 +2,1040 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Josephine Baker — Women's History Month</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap');
 
   :root {
-    --gold:   #b8902a;
-    --dark:   #111009;
-    --text:   #1a1710;
-    --muted:  #6b6045;
-    --bg:     #faf7f0;
-    --cream:  #f2ece0;
-    --rule:   #d4b96a;
+    --gold:    #c9a84c;
+    --gold-lt: #e8c96b;
+    --cream:   #f5efe0;
+    --dark:    #0c0a07;
+    --dark2:   #161309;
+    --dark3:   #1f1b0f;
+    --text:    #e8dfc8;
+    --muted:   #8a7d5a;
+    --accent:  #7b3f2b;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  @page {
-    size: letter;
-    margin: 0.6in 0.7in;
-  }
-
-  body {
-    background: var(--bg);
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--dark);
     color: var(--text);
     font-family: 'Inter', sans-serif;
-    font-size: 10.5pt;
-    line-height: 1.75;
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 48px 36px 80px;
+    overflow: hidden;
+    user-select: none;
   }
 
-  /* ── Print hint (hidden when printing) ──────────────────── */
-  .print-hint {
-    background: #1a1710;
-    color: #c9a84c;
-    text-align: center;
-    padding: 12px 20px;
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    border-radius: 4px;
-    margin-bottom: 48px;
-  }
-  @media print { .print-hint { display: none; } }
-
-  /* ── Cover ───────────────────────────────────────────────── */
-  .cover {
-    text-align: center;
-    padding: 60px 0 56px;
-    border-bottom: 3px solid var(--rule);
-    margin-bottom: 56px;
-    page-break-after: always;
+  /* ── Slide container ─────────────────────────────────────────── */
+  .deck {
+    width: 100vw; height: 100vh;
+    position: relative;
   }
 
-  .cover-eyebrow {
-    font-size: 9pt;
-    font-weight: 600;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 20px;
-  }
-
-  .cover-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 62pt;
-    font-weight: 900;
-    line-height: 0.9;
-    color: var(--dark);
-    margin-bottom: 10px;
-  }
-
-  .cover-name .last { color: var(--gold); }
-
-  .cover-dates {
-    font-size: 10pt;
-    letter-spacing: 0.25em;
-    color: var(--muted);
-    margin: 24px 0;
-    text-transform: uppercase;
-  }
-
-  .cover-rule {
+  .slide {
+    position: absolute;
+    inset: 0;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 14px;
-    justify-content: center;
-    margin: 28px 0;
-  }
-  .cover-rule::before, .cover-rule::after {
-    content: '';
-    flex: 1;
-    max-width: 120px;
-    height: 1px;
-    background: var(--rule);
-  }
-  .cover-rule span { font-size: 18px; color: var(--gold); }
-
-  .cover-tags {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  .tag {
-    font-size: 8pt;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--gold);
-    border: 1px solid var(--rule);
-    padding: 5px 13px;
-    border-radius: 2px;
-    background: rgba(184,144,42,0.05);
+    text-align: center;
+    padding: 60px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+    overflow: hidden;
   }
 
-  .cover-quote {
-    font-family: 'Playfair Display', serif;
-    font-size: 13pt;
-    font-style: italic;
-    color: var(--muted);
-    margin-top: 40px;
-    line-height: 1.6;
-    max-width: 520px;
-    margin-left: auto;
-    margin-right: auto;
+  .slide.active {
+    opacity: 1;
+    pointer-events: all;
   }
 
-  /* ── Section ─────────────────────────────────────────────── */
-  .section {
-    margin-bottom: 52px;
-    page-break-inside: avoid;
-  }
-
-  .section-header {
-    display: flex;
-    align-items: flex-end;
-    gap: 16px;
-    margin-bottom: 22px;
-    border-bottom: 1px solid var(--rule);
-    padding-bottom: 12px;
-  }
-
-  .section-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 36pt;
-    font-weight: 900;
-    color: rgba(184,144,42,0.2);
-    line-height: 1;
-    flex-shrink: 0;
-  }
-
-  .section-meta { flex: 1; }
-
-  .section-eyebrow {
-    font-size: 8pt;
+  /* ── Common typographic elements ─────────────────────────────── */
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--gold);
-    margin-bottom: 4px;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--cream);
+    margin-bottom: 24px;
   }
 
   h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 22pt;
+    font-size: clamp(32px, 4.5vw, 64px);
     font-weight: 700;
     line-height: 1.1;
-    color: var(--dark);
+    color: var(--cream);
+    margin-bottom: 20px;
   }
 
-  /* ── Body text ───────────────────────────────────────────── */
-  .body-text {
-    font-size: 10.5pt;
-    line-height: 1.8;
-    color: var(--text);
-    font-weight: 300;
-    margin-bottom: 14px;
-  }
-
-  .body-text b, .body-text strong {
-    font-weight: 600;
-    color: var(--dark);
-  }
-
-  .body-text em { font-style: italic; }
-
-  /* ── Pull quote ──────────────────────────────────────────── */
-  .pull-quote {
-    border-left: 4px solid var(--gold);
-    padding: 18px 24px;
-    margin: 28px 0;
-    background: rgba(184,144,42,0.05);
-    page-break-inside: avoid;
-  }
-
-  .pull-quote p {
+  h3 {
     font-family: 'Playfair Display', serif;
-    font-size: 13pt;
+    font-size: clamp(20px, 2.5vw, 32px);
+    font-weight: 400;
     font-style: italic;
-    line-height: 1.6;
-    color: var(--dark);
+    color: var(--gold-lt);
+    margin-bottom: 32px;
   }
 
-  .pull-quote .attr {
-    font-family: 'Inter', sans-serif;
-    font-size: 8.5pt;
+  p {
+    font-size: clamp(15px, 1.6vw, 20px);
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--text);
+    max-width: 800px;
+  }
+
+  .gold { color: var(--gold-lt); }
+  .italic { font-style: italic; }
+
+  /* ── Decorative elements ─────────────────────────────────────── */
+  .rule {
+    width: 60px; height: 2px;
+    background: var(--gold);
+    margin: 0 auto 32px;
+  }
+
+  .rule-left {
+    width: 60px; height: 2px;
+    background: var(--gold);
+    margin: 0 0 20px;
+  }
+
+  .star-rule {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+    justify-content: center;
+  }
+  .star-rule::before, .star-rule::after {
+    content: '';
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+  .star-rule span {
+    color: var(--gold);
+    font-size: 16px;
+  }
+
+  /* ── Navigation ──────────────────────────────────────────────── */
+  .nav {
+    position: fixed;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 100;
+  }
+
+  .nav-btn {
+    background: none;
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold);
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { background: rgba(201,168,76,0.15); border-color: var(--gold); }
+  .nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+  .slide-counter {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  .dot-nav {
+    position: fixed;
+    right: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .dot.active { background: var(--gold); transform: scale(1.5); }
+
+  /* ── SLIDE 1 — Title ─────────────────────────────────────────── */
+  #s1 {
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(123,63,43,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 30%, rgba(201,168,76,0.12) 0%, transparent 50%),
+      var(--dark);
+  }
+
+  .title-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(60px, 10vw, 130px);
+    font-weight: 900;
+    line-height: 0.95;
+    color: var(--cream);
+    letter-spacing: -0.01em;
+  }
+
+  .title-name .first { display: block; }
+  .title-name .last {
+    display: block;
+    color: var(--gold-lt);
+  }
+
+  .title-dates {
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    margin-top: 20px;
+    text-transform: uppercase;
+  }
+
+  .title-tags {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 36px;
+  }
+  .tag {
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--gold);
-    margin-top: 10px;
+    border: 1px solid rgba(201,168,76,0.35);
+    padding: 6px 14px;
+    border-radius: 2px;
   }
 
-  /* ── Fact boxes ──────────────────────────────────────────── */
-  .fact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin: 22px 0;
-  }
-
-  .fact-box {
-    background: var(--cream);
-    border: 1px solid #ddd2b0;
-    border-radius: 4px;
-    padding: 16px 18px;
-    page-break-inside: avoid;
-  }
-
-  .fact-box-label {
-    font-size: 8pt;
-    font-weight: 700;
+  .womens-badge {
+    position: absolute;
+    top: 36px;
+    right: 48px;
+    font-size: 11px;
+    font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--gold);
-    margin-bottom: 6px;
+    opacity: 0.7;
   }
 
-  .fact-box p {
-    font-size: 10pt;
+  /* ── SLIDE 2 — Two-col layout ────────────────────────────────── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    text-align: left;
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  .col-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .col h2 { margin-bottom: 16px; text-align: left; }
+
+  .fact-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .fact-list li {
+    font-size: clamp(13px, 1.3vw, 17px);
     line-height: 1.65;
     color: var(--text);
     font-weight: 300;
+    padding-left: 18px;
+    position: relative;
   }
 
-  .fact-box p b { font-weight: 600; color: var(--dark); }
+  .fact-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+  }
 
-  /* ── Awards strip ────────────────────────────────────────── */
-  .awards-strip {
+  .fact-list li b { color: var(--gold-lt); font-weight: 600; }
+
+  /* ── SLIDE — Big quote ───────────────────────────────────────── */
+  .big-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3vw, 42px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.45;
+    color: var(--cream);
+    max-width: 900px;
+    position: relative;
+  }
+
+  .big-quote::before {
+    content: '\201C';
+    position: absolute;
+    top: -40px;
+    left: -20px;
+    font-size: 120px;
+    color: var(--gold);
+    opacity: 0.3;
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .quote-attr {
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 28px;
+  }
+
+  /* ── SLIDE — Stats row ───────────────────────────────────────── */
+  .stat-row {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin: 22px 0;
-    page-break-inside: avoid;
+    gap: 40px;
+    max-width: 900px;
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .stat-box {
+    text-align: center;
+    padding: 28px 20px;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px;
+    background: rgba(201,168,76,0.04);
+  }
+
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 900;
+    color: var(--gold-lt);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── Left-aligned text slide ─────────────────────────────────── */
+  .left-slide {
+    text-align: left;
+    max-width: 900px;
+    width: 100%;
+  }
+
+  .left-slide h2 { text-align: left; }
+
+  /* ── Medal/award cards ───────────────────────────────────────── */
+  .award-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1000px;
+    margin-top: 40px;
+    width: 100%;
   }
 
   .award-card {
+    background: rgba(201,168,76,0.06);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 6px;
+    padding: 24px 20px;
     text-align: center;
-    padding: 18px 12px;
-    border: 1px solid var(--rule);
-    border-radius: 4px;
-    background: rgba(184,144,42,0.04);
   }
 
-  .award-icon { font-size: 22px; margin-bottom: 8px; }
-  .award-name { font-size: 9.5pt; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
-  .award-desc { font-size: 8.5pt; color: var(--muted); line-height: 1.55; font-weight: 300; }
+  .award-icon { font-size: 32px; margin-bottom: 12px; }
+  .award-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--gold-lt);
+    margin-bottom: 8px;
+  }
+  .award-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 400;
+  }
 
-  /* ── Children grid ───────────────────────────────────────── */
+  /* ── Rainbow tribe children ──────────────────────────────────── */
   .children-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 10px;
-    margin: 20px 0;
-    page-break-inside: avoid;
+    gap: 12px;
+    max-width: 1000px;
+    margin-top: 36px;
+    width: 100%;
   }
 
   .child-card {
+    background: rgba(201,168,76,0.06);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 6px;
+    padding: 12px 8px;
     text-align: center;
-    padding: 10px 6px;
-    border: 1px solid #ddd2b0;
-    border-radius: 4px;
-    background: var(--cream);
   }
 
-  .child-flag { font-size: 18px; margin-bottom: 4px; }
-  .child-name { font-size: 8pt; font-weight: 600; color: var(--dark); margin-bottom: 1px; line-height: 1.3; }
-  .child-country { font-size: 7.5pt; color: var(--muted); line-height: 1.3; }
+  .child-flag { font-size: 22px; margin-bottom: 6px; }
+  .child-name { font-size: 12px; font-weight: 600; color: var(--gold-lt); margin-bottom: 2px; }
+  .child-country { font-size: 10px; color: var(--muted); }
 
-  /* ── Firsts list ─────────────────────────────────────────── */
+  /* ── Timeline ────────────────────────────────────────────────── */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 800px;
+    width: 100%;
+    text-align: left;
+    margin-top: 20px;
+  }
+
+  .tl-item {
+    display: grid;
+    grid-template-columns: 80px 1px 1fr;
+    gap: 0 20px;
+    position: relative;
+  }
+
+  .tl-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold);
+    text-align: right;
+    padding: 0 0 24px;
+    line-height: 1.3;
+  }
+
+  .tl-line {
+    position: relative;
+    background: rgba(201,168,76,0.2);
+  }
+
+  .tl-line::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .tl-content {
+    padding: 0 0 24px 0;
+  }
+
+  .tl-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+
+  .tl-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── Background art for specific slides ─────────────────────── */
+  #s2 {
+    background:
+      radial-gradient(ellipse at 70% 80%, rgba(123,63,43,0.2) 0%, transparent 55%),
+      var(--dark2);
+  }
+
+  #s3 {
+    background:
+      linear-gradient(rgba(12,10,7,0.78), rgba(12,10,7,0.78)),
+      url('_img/banana.jpg') center/cover no-repeat;
+  }
+
+  #s4 {
+    background:
+      linear-gradient(135deg, var(--dark2) 0%, var(--dark3) 100%),
+      radial-gradient(ellipse at 80% 20%, rgba(201,168,76,0.15) 0%, transparent 50%);
+  }
+
+  #s5 {
+    background:
+      radial-gradient(ellipse at 50% 100%, rgba(123,63,43,0.3) 0%, transparent 50%),
+      var(--dark);
+  }
+
+  #s6 {
+    background:
+      linear-gradient(rgba(12,10,7,0.68), rgba(12,10,7,0.68)),
+      url('_img/glamour.jpg') center top/cover no-repeat;
+  }
+
+  #s7 {
+    background:
+      radial-gradient(ellipse at 90% 10%, rgba(201,168,76,0.1) 0%, transparent 50%),
+      var(--dark3);
+  }
+
+  #s8 {
+    background:
+      linear-gradient(rgba(12,10,7,0.75), rgba(12,10,7,0.75)),
+      url('_img/perform.jpg') center/cover no-repeat;
+  }
+
+  #s9 {
+    background:
+      linear-gradient(rgba(12,10,7,0.78), rgba(12,10,7,0.78)),
+      url('_img/milandes.jpg') center/cover no-repeat;
+  }
+
+  #s10 {
+    background:
+      radial-gradient(ellipse at 80% 50%, rgba(201,168,76,0.08) 0%, transparent 50%),
+      var(--dark3);
+  }
+
+  #s11 {
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(123,63,43,0.35) 0%, transparent 65%),
+      var(--dark);
+  }
+
+  #s12 {
+    background:
+      radial-gradient(ellipse at 30% 70%, rgba(201,168,76,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 20%, rgba(123,63,43,0.2) 0%, transparent 50%),
+      var(--dark);
+  }
+
+  #s13 {
+    background:
+      linear-gradient(rgba(12,10,7,0.72), rgba(12,10,7,0.72)),
+      url('_img/young.jpg') center top/cover no-repeat;
+  }
+
+  /* ── Pantheon highlight ──────────────────────────────────────── */
+  .pantheon-box {
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 8px;
+    padding: 36px 48px;
+    max-width: 800px;
+    margin-top: 32px;
+    text-align: center;
+  }
+
+  .pantheon-date {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--gold-lt);
+    margin-bottom: 8px;
+  }
+
+  .pantheon-label {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
   .firsts-list {
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin: 20px 0;
+    text-align: left;
   }
 
   .firsts-list li {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text);
     display: flex;
     gap: 12px;
-    align-items: flex-start;
-    font-size: 10.5pt;
-    line-height: 1.6;
-    font-weight: 300;
+    align-items: center;
   }
 
   .firsts-list li::before {
     content: '★';
     color: var(--gold);
     flex-shrink: 0;
-    margin-top: 1px;
   }
 
-  .firsts-list li b { font-weight: 600; }
-
-  /* ── Stats row ───────────────────────────────────────────── */
-  .stats-row {
+  /* ── Slide 12 closing ────────────────────────────────────────── */
+  .legacy-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    margin: 22px 0;
-    page-break-inside: avoid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 900px;
+    margin-top: 36px;
+    width: 100%;
+    text-align: left;
   }
 
-  .stat-box {
-    text-align: center;
-    border: 1px solid var(--rule);
-    border-radius: 4px;
-    padding: 18px 12px;
-    background: rgba(184,144,42,0.04);
+  .legacy-item {
+    padding: 20px 24px;
+    border-left: 3px solid var(--gold);
+    background: rgba(201,168,76,0.04);
   }
 
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 28pt;
-    font-weight: 900;
-    color: var(--gold);
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-
-  .stat-label {
-    font-size: 8.5pt;
+  .legacy-item p {
+    font-size: 14px;
     color: var(--muted);
-    line-height: 1.5;
-    font-weight: 400;
-  }
-
-  /* ── Page break helpers ──────────────────────────────────── */
-  .page-break { page-break-after: always; }
-  .no-break   { page-break-inside: avoid; }
-
-  /* ── Closing quote ───────────────────────────────────────── */
-  .closing {
-    text-align: center;
-    padding: 48px 20px 36px;
-    border-top: 3px solid var(--rule);
-    margin-top: 60px;
-  }
-
-  .closing-quote {
-    font-family: 'Playfair Display', serif;
-    font-size: 16pt;
-    font-style: italic;
     line-height: 1.65;
-    color: var(--dark);
-    max-width: 600px;
-    margin: 0 auto 20px;
   }
 
-  .closing-attr {
-    font-size: 9pt;
+  .legacy-item .lh {
+    font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--gold);
+    margin-bottom: 8px;
   }
 
-  .closing-badge {
-    margin-top: 32px;
-    font-size: 8.5pt;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-
-  /* ── Timeline ────────────────────────────────────────────── */
-  .timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin: 20px 0;
-    page-break-inside: avoid;
-  }
-
-  .tl-row {
-    display: grid;
-    grid-template-columns: 64px 16px 1fr;
-    gap: 0 12px;
-    align-items: stretch;
-  }
-
-  .tl-year {
+  /* ── Closing slide ───────────────────────────────────────────── */
+  .close-quote {
     font-family: 'Playfair Display', serif;
-    font-size: 10pt;
-    font-weight: 700;
+    font-size: clamp(18px, 2.5vw, 30px);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--cream);
+    max-width: 820px;
+    margin-bottom: 32px;
+    position: relative;
+  }
+
+  .close-quote::before {
+    content: '\201C';
+    position: absolute;
+    top: -50px;
+    left: -10px;
+    font-size: 100px;
     color: var(--gold);
-    text-align: right;
-    padding: 0 0 18px;
-    line-height: 1.4;
-    padding-top: 2px;
+    opacity: 0.25;
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
   }
 
-  .tl-spine {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .two-col-facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    max-width: 1000px;
+    width: 100%;
+    text-align: left;
   }
 
-  .tl-dot {
-    width: 10px; height: 10px;
+  /* ── Slide photos ─────────────────────────────────────────── */
+  .slide-photo-circle {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 220px;
+    height: 220px;
     border-radius: 50%;
-    background: var(--gold);
-    flex-shrink: 0;
-    margin-top: 4px;
+    object-fit: cover;
+    object-position: center top;
+    border: 2px solid rgba(201,168,76,0.45);
+    box-shadow: 0 8px 48px rgba(0,0,0,0.7);
+    opacity: 0.9;
   }
 
-  .tl-spine-line {
-    flex: 1;
-    width: 1px;
-    background: #ddd2b0;
-    margin-top: 2px;
-  }
-
-  .tl-text {
-    padding-bottom: 18px;
-  }
-
-  .tl-title {
-    font-size: 10.5pt;
-    font-weight: 600;
-    color: var(--dark);
-    line-height: 1.4;
-    margin-bottom: 2px;
-  }
-
-  .tl-desc {
-    font-size: 9.5pt;
-    color: var(--muted);
-    line-height: 1.6;
-    font-weight: 300;
+  .slide-photo-aside {
+    position: absolute;
+    right: 64px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 260px;
+    height: 340px;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 4px;
+    border: 1px solid rgba(201,168,76,0.3);
+    box-shadow: 0 8px 48px rgba(0,0,0,0.75);
+    opacity: 0.85;
   }
 </style>
 </head>
 <body>
 
-<div class="print-hint">
-  To save as PDF: File → Print → Change destination to "Save as PDF" → Save
+<div class="progress-bar" id="progress"></div>
+<div class="dot-nav" id="dotNav"></div>
+
+<div class="deck">
+
+  <!-- SLIDE 1 — Title -->
+  <div class="slide active" id="s1">
+    <div class="womens-badge">Women's History Month 2026
+    </div>
+    <img src="_img/portrait.jpg" class="slide-photo-circle" alt="Josephine Baker portrait">
+    <div class="eyebrow">A Life Without Parallel</div>
+    <div class="title-name">
+      <span class="first">Josephine</span>
+      <span class="last">Baker</span>
+    </div>
+    <div class="title-dates">June 3, 1906 — April 12, 1975</div>
+    <div class="title-tags">
+      <span class="tag">Performer</span>
+      <span class="tag">Spy</span>
+      <span class="tag">Civil Rights Icon</span>
+      <span class="tag">Mother of 12</span>
+      <span class="tag">French National Hero</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 — Born into Nothing -->
+  <div class="slide" id="s2">
+    <div class="left-slide">
+      <div class="eyebrow">St. Louis, Missouri · 1906</div>
+      <h2>Born into<br><span class="gold">Nothing</span></h2>
+      <div class="rule-left"></div>
+      <div class="two-col-facts">
+        <ul class="fact-list">
+          <li>Born <b>Freda Josephine McDonald</b> to a single mother who washed laundry for white families</li>
+          <li>No indoor plumbing. Grew up in a rooming-house neighborhood near the railroad yards</li>
+          <li>Sent to work as a <b>live-in maid for white families at age 8</b></li>
+          <li>Married at <b>13</b> — then again at <b>15</b>, keeping her second husband's name: Baker</li>
+        </ul>
+        <ul class="fact-list">
+          <li>At age <b>11</b>, she witnessed the East St. Louis Race Riots — one of the worst racial massacres in U.S. history</li>
+          <li>Ran away from home at 13. Performed on the streets to survive</li>
+          <li>Talked her way into a touring vaudeville troupe by <b>memorizing every role</b> — without being asked</li>
+          <li>By 19, she was on a ship to Paris. She never looked back.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 — Paris -->
+  <div class="slide" id="s3">
+    <div class="eyebrow">Paris · October 2, 1925</div>
+    <h2>The Night Paris<br><span class="gold">Fell in Love</span></h2>
+    <div class="rule"></div>
+    <p>At 19, Josephine Baker stepped onto the stage of the <em>Théâtre des Champs-Élysées</em> and performed <em>La Danse Sauvage</em>. Paris went electric. She was signed to headline the legendary Folies Bergère before the curtain fell.</p>
+    <br><br>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-number">$250</div>
+        <div class="stat-label">Her weekly salary — week one in Paris</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">4</div>
+        <div class="stat-label">Nicknames: Black Venus, Black Pearl, Bronze Venus, Creole Goddess</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">1,500+</div>
+        <div class="stat-label">Marriage proposals received during her career</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 — Breaking Barriers -->
+  <div class="slide" id="s4">
+    <div class="eyebrow">The Silver Screen · 1927</div>
+    <h2>Barriers<br><span class="gold">Broken</span></h2>
+    <div class="rule"></div>
+    <p style="max-width:700px; margin-bottom: 40px;">In 1927, Baker became the <strong style="color:var(--gold-lt)">first Black woman to star in a major motion picture</strong> — the French silent film <em>Siren of the Tropics</em>. Hollywood wouldn't allow it. Paris didn't need permission.</p>
+    <div class="award-grid" style="grid-template-columns: repeat(3,1fr); max-width: 900px;">
+      <div class="award-card">
+        <div class="award-icon">🎬</div>
+        <div class="award-name">Siren of the Tropics</div>
+        <div class="award-desc">1927 — First Black woman to star in a major motion picture</div>
+      </div>
+      <div class="award-card">
+        <div class="award-icon">🎭</div>
+        <div class="award-name">Folies Bergère Headliner</div>
+        <div class="award-desc">First Black woman to headline Paris's most legendary entertainment venue</div>
+      </div>
+      <div class="award-card">
+        <div class="award-icon">🇫🇷</div>
+        <div class="award-name">French Citizen · 1937</div>
+        <div class="award-desc">Renounced her American citizenship — France gave her what America never did</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 — WWII Spy -->
+  <div class="slide" id="s5">
+    <img src="_img/1948.jpg" class="slide-photo-circle" alt="Josephine Baker, circa 1948">
+    <div class="eyebrow">World War II · 1939–1945</div>
+    <h2>The Most Famous<br><span class="gold">Spy in Paris</span></h2>
+    <div class="rule"></div>
+    <p style="max-width:750px; margin-bottom: 36px;">Recruited by French intelligence in 1939, Baker used her celebrity as a cover. She attended Axis diplomatic parties, eavesdropped on generals, and smuggled classified intelligence written in <strong style="color:var(--gold-lt)">invisible ink on her sheet music</strong> — across international borders that no guard dared fully search.</p>
+    <div style="font-family: 'Playfair Display', serif; font-size: clamp(18px,2vw,26px); font-style: italic; color: var(--gold-lt); margin-bottom: 40px;">
+      "Who would dare strip-search Josephine Baker?"
+    </div>
+    <div class="award-grid" style="grid-template-columns: repeat(3,1fr); max-width: 900px;">
+      <div class="award-card">
+        <div class="award-icon">🎖️</div>
+        <div class="award-name">Croix de Guerre</div>
+        <div class="award-desc">France's highest military honor for combat valor, awarded 1957</div>
+      </div>
+      <div class="award-card">
+        <div class="award-icon">⭐</div>
+        <div class="award-name">Légion d'Honneur</div>
+        <div class="award-desc">The highest civilian decoration France bestows — presented 1961</div>
+      </div>
+      <div class="award-card">
+        <div class="award-icon">✈️</div>
+        <div class="award-name">Sub-Lieutenant</div>
+        <div class="award-desc">Formally commissioned in the French Women's Auxiliary Air Force, 1944</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 — Quote: One day I realized -->
+  <div class="slide" id="s6">
+    <div class="big-quote">
+      "One day I realized I was living in a country where I was afraid to be black. It was only a country for white people. Not black. So I left."
+    </div>
+    <div class="quote-attr">— Josephine Baker, on why she left America</div>
+  </div>
+
+  <!-- SLIDE 7 — Civil Rights -->
+  <div class="slide" id="s7">
+    <div class="eyebrow">Civil Rights · 1950s – 1968</div>
+    <h2>She Never<br><span class="gold">Bent the Knee</span></h2>
+    <div class="rule"></div>
+    <div class="two-col-facts">
+      <ul class="fact-list">
+        <li>Refused to perform for <b>any segregated audience</b> in America — ever. When venues pushed back, she fought until they desegregated.</li>
+        <li><b>The Stork Club, 1951:</b> Refused service in NYC's most fashionable club. Filed a public complaint. A young Grace Kelly walked out in solidarity — beginning a lifelong friendship.</li>
+        <li>The NAACP declared <b>May 20, 1951</b>, "Josephine Baker Day."</li>
+      </ul>
+      <ul class="fact-list">
+        <li>Denied a U.S. visa — twice — in the 1950s for her activism and alleged communist sympathies during McCarthyism</li>
+        <li>In <b>1968</b>, Coretta Scott King personally asked Baker to take over as leader of the Civil Rights Movement after MLK's assassination. Baker considered it for days — then declined, saying her <b>12 children were too young to lose their mother</b>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 8 — March on Washington -->
+  <div class="slide" id="s8">
+    <div class="eyebrow">August 28, 1963</div>
+    <h2>250,000 People.<br><span class="gold">One Woman on Stage.</span></h2>
+    <div class="rule"></div>
+    <p style="max-width:780px; margin-bottom: 36px;">Baker was the <strong style="color:var(--gold-lt)">only official female speaker</strong> at the March on Washington. She stood at the microphone in her French Resistance uniform — khaki jacket, military medals pinned to her chest — and spoke immediately <em>before</em> Dr. King delivered "I Have a Dream."</p>
+    <div class="pantheon-box" style="padding: 28px 40px; margin-top: 0;">
+      <p style="font-family: 'Playfair Display', serif; font-size: clamp(15px, 1.8vw, 22px); font-style: italic; line-height: 1.6; color: var(--cream); max-width: none;">
+        "I have walked into the palaces of kings and queens and into the houses of presidents. And much more. But I could not walk into a hotel in America and get a cup of coffee, and that made me mad."
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 9 — Rainbow Tribe -->
+  <div class="slide" id="s9">
+    <div class="eyebrow">Les Milandes Château · The Dordogne, France</div>
+    <h2>The <span class="gold">Rainbow Tribe</span></h2>
+    <div class="rule"></div>
+    <p style="max-width:780px; margin-bottom: 28px;">Baker adopted <strong style="color:var(--gold-lt)">12 children</strong> from 12 different countries and religions — and raised them together in a 15th-century French château she opened to tourists, to prove that people of every race and faith could live as one family.</p>
+    <div class="children-grid">
+      <div class="child-card"><div class="child-flag">🇯🇵</div><div class="child-name">Akio</div><div class="child-country">Japan</div></div>
+      <div class="child-card"><div class="child-flag">🇯🇵</div><div class="child-name">Janot</div><div class="child-country">Japan</div></div>
+      <div class="child-card"><div class="child-flag">🇨🇴</div><div class="child-name">Luis</div><div class="child-country">Colombia</div></div>
+      <div class="child-card"><div class="child-flag">🇫🇮</div><div class="child-name">Jari</div><div class="child-country">Finland</div></div>
+      <div class="child-card"><div class="child-flag">🇫🇷</div><div class="child-name">Jean-Claude</div><div class="child-country">France</div></div>
+      <div class="child-card"><div class="child-flag">🇮🇱</div><div class="child-name">Moïse</div><div class="child-country">Israel · raised Jewish</div></div>
+      <div class="child-card"><div class="child-flag">🇩🇿</div><div class="child-name">Brahim</div><div class="child-country">Algeria · raised Muslim</div></div>
+      <div class="child-card"><div class="child-flag">🇫🇷</div><div class="child-name">Marianne</div><div class="child-country">France</div></div>
+      <div class="child-card"><div class="child-flag">🇨🇮</div><div class="child-name">Koffi</div><div class="child-country">Ivory Coast</div></div>
+      <div class="child-card"><div class="child-flag">🇻🇪</div><div class="child-name">Mara</div><div class="child-country">Venezuela</div></div>
+      <div class="child-card"><div class="child-flag">🇫🇷</div><div class="child-name">Noël</div><div class="child-country">France · found abandoned</div></div>
+      <div class="child-card"><div class="child-flag">🇲🇦</div><div class="child-name">Stellina</div><div class="child-country">Morocco</div></div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10 — The Fall and the Rise -->
+  <div class="slide" id="s10">
+    <img src="_img/late.jpg" class="slide-photo-aside" alt="Josephine Baker in her later years">
+    <div class="eyebrow">1969 · 1975</div>
+    <h2>The Fall.<br><span class="gold">Then the Curtain Call.</span></h2>
+    <div class="rule"></div>
+    <div class="two-col-facts">
+      <div>
+        <div class="col-label">The Fall — 1969</div>
+        <ul class="fact-list" style="margin-top: 12px;">
+          <li>Debt and fraud stripped Baker of Les Milandes. She was photographed sitting on the château steps after eviction — a photo that stunned the world.</li>
+          <li>Her childhood friend Grace Kelly — now <b>Princess Grace of Monaco</b> — gave Baker and her 12 children a villa on the French Riviera.</li>
+          <li>A decade of hardship followed.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-label">The Comeback — April 8, 1975</div>
+        <ul class="fact-list" style="margin-top: 12px;">
+          <li>At <b>68 years old</b>, Baker opened a grand comeback show at the Bobino Theater in Paris — tracing 50 years of her career in one night.</li>
+          <li>Standing ovations. Critics called it the greatest performance of her life. Paris wept.</li>
+          <li><b>Four days later</b>, she was found unresponsive in her apartment. She died on April 12, 1975, of a cerebral hemorrhage.</li>
+          <li>France gave her a <b>state funeral</b> — the first American-born woman to receive one. 20,000 people lined the streets of Paris.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11 — The Panthéon -->
+  <div class="slide" id="s11">
+    <div class="eyebrow">November 30, 2021</div>
+    <h2>Inducted into<br><span class="gold">The Panthéon</span></h2>
+    <div class="rule"></div>
+    <div class="pantheon-box">
+      <div class="firsts-list">
+        <li>First <strong>Black woman</strong> ever admitted to France's Panthéon</li>
+        <li>First <strong>American</strong> ever admitted to the Panthéon</li>
+        <li>First <strong>performing artist</strong> ever admitted to the Panthéon</li>
+        <li>The sixth <strong>woman</strong> admitted — among Voltaire, Rousseau, Victor Hugo, Marie Curie</li>
+        <li>Soldiers carried her cenotaph up the steps draped in the French tricolor. Soil inside from <strong>St. Louis, Paris, and Monaco</strong>.</li>
+      </div>
+    </div>
+    <p style="margin-top: 24px; font-size: 14px; color: var(--muted);">President Macron: <em>"A war heroine, fighter, dancer, singer — devoted to our ideals."</em></p>
+  </div>
+
+  <!-- SLIDE 12 — Legacy -->
+  <div class="slide" id="s12">
+    <div class="eyebrow">Women's History Month</div>
+    <h2>What She Left<br><span class="gold">Behind</span></h2>
+    <div class="rule"></div>
+    <div class="legacy-grid">
+      <div class="legacy-item">
+        <div class="lh">On Stage</div>
+        <p>One of the most celebrated performers in history. Helped define the Jazz Age. First Black headliner at the Folies Bergère. First Black woman in a major film.</p>
+      </div>
+      <div class="legacy-item">
+        <div class="lh">In War</div>
+        <p>A genuine decorated intelligence operative — not just a supporter. Légion d'Honneur. Croix de Guerre. Formally commissioned as a military officer.</p>
+      </div>
+      <div class="legacy-item">
+        <div class="lh">For Civil Rights</div>
+        <p>Refused to perform for segregated crowds decades before the movement. Only official female speaker at the March on Washington. Turned down leadership of the movement to protect her children.</p>
+      </div>
+      <div class="legacy-item">
+        <div class="lh">As a Mother</div>
+        <p>Proved — with 12 children from 12 countries — that race, religion, and nationality are no barrier to a family. A living refutation of prejudice.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 13 — Closing Quote -->
+  <div class="slide" id="s13">
+    <div class="close-quote">
+      "Surely the day will come when color means nothing more than skin tone, when religion is seen uniquely as a way to speak one's soul; when birth places have the weight of a throw of the dice and all men are born free, when understanding breeds love and brotherhood."
+    </div>
+    <div class="quote-attr">— Josephine Baker</div>
+    <div style="margin-top: 48px; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted);">Women's History Month &nbsp;·&nbsp; 2026</div>
+  </div>
+
 </div>
 
-<!-- ══════════════════════════════════════════
-     COVER
-══════════════════════════════════════════ -->
-<div class="cover">
-  <div class="cover-eyebrow">Women's History Month · 2025</div>
-  <div class="cover-name">
-    <span style="display:block">Josephine</span>
-    <span class="last" style="display:block">Baker</span>
-  </div>
-  <div class="cover-dates">June 3, 1906 — April 12, 1975</div>
-  <div class="cover-rule"><span>✦</span></div>
-  <div class="cover-tags">
-    <span class="tag">Performer</span>
-    <span class="tag">WWII Spy</span>
-    <span class="tag">Civil Rights Icon</span>
-    <span class="tag">Mother of 12</span>
-    <span class="tag">French National Hero</span>
-    <span class="tag">Panthéon</span>
-  </div>
-  <div class="cover-quote">
-    "One day I realized I was living in a country where I was afraid to be Black. It was only a country for white people. Not Black. So I left."
-  </div>
+<!-- Navigation -->
+<div class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="goTo(current-1)" disabled>&#8592;</button>
+  <span class="slide-counter" id="counter">1 / 13</span>
+  <button class="nav-btn" id="nextBtn" onclick="goTo(current+1)">&#8594;</button>
 </div>
 
-<!-- ══════════════════════════════════════════
-     1. EARLY LIFE
-══════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-num">01</div>
-    <div class="section-meta">
-      <div class="section-eyebrow">St. Louis, Missouri · 1906</div>
-      <h2>Born into Nothing</h2>
-    </div>
-  </div>
+<script>
+  const TOTAL = 13;
+  let current = 0;
 
-  <p class="body-text">
-    Josephine Baker was born <strong>Freda Josephine McDonald</strong> on June 3, 1906, in the Chestnut Valley neighborhood of St. Louis — a low-income district of rooming houses and railroad yards without indoor plumbing. Her mother, Carrie McDonald, was a washerwoman who had abandoned her own dreams of performing. Her father, Eddie Carson, a vaudeville drummer, abandoned the family shortly after Josephine's birth.
-  </p>
+  // Build dot nav
+  const dotNav = document.getElementById('dotNav');
+  for (let i = 0; i < TOTAL; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotNav.appendChild(d);
+  }
 
-  <p class="body-text">
-    By the time she was eight, Josephine was working as a live-in domestic servant in white households. At eleven, she witnessed the <strong>East St. Louis Race Riots of 1917</strong> — one of the worst episodes of racial violence in American history, leaving hundreds dead and thousands displaced. She never forgot it.
-  </p>
+  function goTo(n) {
+    if (n < 0 || n >= TOTAL) return;
+    document.getElementById('s' + (current + 1)).classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = n;
+    document.getElementById('s' + (current + 1)).classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = (current + 1) + ' / ' + TOTAL;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === TOTAL - 1;
+    document.getElementById('progress').style.width = ((current + 1) / TOTAL * 100) + '%';
+  }
 
-  <p class="body-text">
-    She was married for the first time at <strong>13</strong>. Then again at approximately <strong>15</strong>, to a railroad worker named Willie Baker, whose surname she kept for the rest of her life. She ran away from home, performed on the streets of St. Louis, and talked her way into a touring vaudeville troupe by quietly memorizing every role — then stepping in when an actress fell ill during a Boston run of <em>Shuffle Along</em> (1921), the landmark all-Black Broadway musical.
-  </p>
+  // Keyboard nav
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      goTo(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goTo(current - 1);
+    }
+  });
 
-  <div class="stats-row">
-    <div class="stat-box">
-      <div class="stat-num">8</div>
-      <div class="stat-label">Age she began working as a live-in maid for white families</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num">11</div>
-      <div class="stat-label">Age she witnessed the East St. Louis Race Riots</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num">19</div>
-      <div class="stat-label">Age she boarded a ship to Paris and never looked back</div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     2. PARIS
-══════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-num">02</div>
-    <div class="section-meta">
-      <div class="section-eyebrow">Paris · October 2, 1925</div>
-      <h2>The Night Paris Fell in Love</h2>
-    </div>
-  </div>
-
-  <p class="body-text">
-    In 1925, American socialite and producer Caroline Dudley Reagan was assembling a Black American jazz revue for Paris. She spotted Baker performing in New York, offered her $250 a week, and by September 1925 Baker was on a ship to France. She was nineteen years old and had never left the United States.
-  </p>
-
-  <p class="body-text">
-    On October 2, 1925, Baker took the stage at the <em>Théâtre des Champs-Élysées</em> in <em>La Revue Nègre</em> and performed <strong>La Danse Sauvage</strong> wearing little more than feathers. Paris erupted. Picasso, Hemingway, F. Scott Fitzgerald, and the leading intellectuals of the era were in the audience and in the press coverage that followed. She was signed to headline the legendary <strong>Folies Bergère</strong> before the curtain fell that night.
-  </p>
-
-  <p class="body-text">
-    The following year, 1926, she debuted her most iconic look: a girdle of <strong>sixteen drooping artificial bananas</strong> at the Folies Bergère — accompanied by her pet cheetah, Chiquita, on a diamond leash. The image became one of the most reproduced in 20th-century entertainment history. The French press gave her four nicknames: <em>La Vénus Noire, La Perle Noire, La Vénus de Bronze,</em> and <em>La Déesse Créole</em>.
-  </p>
-
-  <div class="pull-quote">
-    <p>"In America, I had to go to the back door. In Paris, I walked through the front — and they gave me the whole building."</p>
-    <div class="attr">— Josephine Baker</div>
-  </div>
-
-  <p class="body-text">
-    In 1936 she returned briefly to the United States to appear in the <em>Ziegfeld Follies</em>. American critics were cruel in ways that their Parisian counterparts never were. She returned to France heartbroken — and became a French citizen in 1937. She would spend the rest of her life there.
-  </p>
-</div>
-
-<div class="page-break"></div>
-
-<!-- ══════════════════════════════════════════
-     3. BREAKING BARRIERS
-══════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-num">03</div>
-    <div class="section-meta">
-      <div class="section-eyebrow">The Silver Screen · 1927 onward</div>
-      <h2>Barriers Broken</h2>
-    </div>
-  </div>
-
-  <p class="body-text">
-    In 1927, Baker became the <strong>first Black woman to star in a major motion picture</strong> — the French silent film <em>Siren of the Tropics</em>, directed by Mario Nalpas and Henri Étiévant. Hollywood had no interest in giving a Black woman a starring role; France didn't require permission. The film ran for months to strong reviews across Europe.
-  </p>
-
-  <div class="awards-strip">
-    <div class="award-card">
-      <div class="award-icon">🎬</div>
-      <div class="award-name">Siren of the Tropics</div>
-      <div class="award-desc">1927 — First Black woman to star in a major motion picture. Hollywood said no. Paris did not.</div>
-    </div>
-    <div class="award-card">
-      <div class="award-icon">🎭</div>
-      <div class="award-name">Folies Bergère</div>
-      <div class="award-desc">First Black woman to headline Paris's most legendary entertainment venue. She brought the house down every night.</div>
-    </div>
-    <div class="award-card">
-      <div class="award-icon">🇫🇷</div>
-      <div class="award-name">French Citizenship · 1937</div>
-      <div class="award-desc">Renounced her American citizenship and formally made France her home. France gave her what America refused.</div>
-    </div>
-  </div>
-
-  <p class="body-text">
-    Her subsequent films — <em>Zou Zou</em> (1934, her first sound film) and <em>Princesse Tam-Tam</em> (1935) — were hits across Europe. She also composed and recorded music throughout the 1930s. Her signature song, <strong><em>J'ai Deux Amours</em></strong> ("I Have Two Loves"), released in 1930, became her personal anthem — referring publicly to France and America, and privately to something deeper.
-  </p>
-</div>
-
-<!-- ══════════════════════════════════════════
-     4. WWII SPY
-══════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-num">04</div>
-    <div class="section-meta">
-      <div class="section-eyebrow">World War II · 1939–1945</div>
-      <h2>The Most Famous Spy in Paris</h2>
-    </div>
-  </div>
-
-  <p class="body-text">
-    In September 1939, days after France declared war on Germany, Baker was recruited by <strong>Jacques Abtey</strong>, head of French counter-military intelligence (the Deuxième Bureau). He needed civilians with access to the highest social circles — diplomats, generals, Axis officials. Baker fit the profile perfectly.
-  </p>
-
-  <p class="body-text">
-    She attended glamorous parties thrown by German, Italian, and Japanese officials in Paris, eavesdropping on conversations and extracting military intelligence while everyone asked for her autograph. She then carried classified information written in <strong>invisible ink on her sheet music</strong>, smuggled across international borders in her lingerie, pinned to her underwear, written on her hands. Border guards fawned over her at every crossing — they never searched her. She smuggled over 50 classified documents this way.
-  </p>
-
-  <div class="pull-quote">
-    <p>"Who would dare strip-search Josephine Baker?"</p>
-    <div class="attr">— Baker to her intelligence handler Jacques Abtey. She was right every single time.</div>
-  </div>
-
-  <p class="body-text">
-    Intelligence Baker gathered about Axis troop positions, coastal geography, and beach defenses in North Africa helped support <strong>Operation Torch</strong> — the Allied invasion of North Africa in November 1942. In May 1944, she was formally commissioned as a <strong>Sub-Lieutenant in the French Women's Auxiliary Air Force</strong> — making her a genuine military officer, not just a supporter.
-  </p>
-
-  <div class="awards-strip">
-    <div class="award-card">
-      <div class="award-icon">🎖️</div>
-      <div class="award-name">Croix de Guerre</div>
-      <div class="award-desc">France's top military combat honor. Awarded December 9, 1957; formally presented August 18, 1961.</div>
-    </div>
-    <div class="award-card">
-      <div class="award-icon">⭐</div>
-      <div class="award-name">Légion d'Honneur</div>
-      <div class="award-desc">The highest decoration France bestows — on any civilian. Awarded and presented alongside the Croix de Guerre.</div>
-    </div>
-    <div class="award-card">
-      <div class="award-icon">🎗️</div>
-      <div class="award-name">Médaille de la Résistance</div>
-      <div class="award-desc">Awarded by formal government decree in 1946 for her service to the French Resistance.</div>
-    </div>
-  </div>
-</div>
-
-<div class="page-break"></div>
-
-<!-- ══════════════════════════════════════════
-     5. CIVIL RIGHTS
-══════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-num">05</div>
-    <div class="section-meta">
-      <div class="section-eyebrow">Civil Rights · 1950s–1968</div>
-      <h2>She Never Bent the Knee</h2>
-    </div>
-  </div>
-
-  <p class="body-text">
-    Baker was one of the first major entertainers to take a hard public stand against segregation — decades before it became culturally safe to do so. Her contract with every American venue included a non-negotiable clause: <strong>integrated audiences only</strong>. When clubs pushed back, she walked. More often than not, they eventually caved.
-  </p>
-
-  <div class="fact-grid">
-    <div class="fact-box">
-      <div class="fact-box-label">The Stork Club · 1951</div>
-      <p>Baker was refused service at New York's most fashionable nightclub. She filed a public complaint and named the club openly as a racist establishment. A young <b>Grace Kelly</b> was sitting at the next table. She immediately got up and left in solidarity — beginning a friendship that would span the rest of their lives.</p>
-    </div>
-    <div class="fact-box">
-      <div class="fact-box-label">NAACP Day · 1951</div>
-      <p>The NAACP was so moved by Baker's refusal to perform for segregated crowds — and her willingness to say so publicly — that they declared <b>May 20, 1951</b>, "Josephine Baker Day" in her honor.</p>
-    </div>
-    <div class="fact-box">
-      <div class="fact-box-label">Denied Re-Entry · 1950s</div>
-      <p>Due to her civil rights activism and alleged "communist sympathies" (McCarthyism), Baker was <b>denied a U.S. visa on at least two occasions</b> in the 1950s. One of the most famous women in the world was banned from the country of her birth for speaking out against racism.</p>
-    </div>
-    <div class="fact-box">
-      <div class="fact-box-label">Offered the Movement · 1968</div>
-      <p>After Martin Luther King Jr.'s assassination, <b>Coretta Scott King</b> traveled personally to the Netherlands to ask Baker to assume MLK's role as leader of the Civil Rights Movement. Baker considered it for several days — then declined, saying her 12 children "were too young to lose their mother." The dangers were real.</p>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     6. MARCH ON WASHINGTON
-══════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-num">06</div>
-    <div class="section-meta">
-      <div class="section-eyebrow">August 28, 1963 · Washington D.C.</div>
-      <h2>250,000 People. One Woman on Stage.</h2>
-    </div>
-  </div>
-
-  <p class="body-text">
-    At age 57, Baker flew from France to Washington specifically for the March. She was <strong>the only official female speaker</strong> at the March on Washington — a fact that drew criticism from women's rights advocates, since all other women were acknowledged but not given speaking slots. Baker addressed the crowd of 250,000 <strong>immediately before Dr. King delivered "I Have a Dream."</strong>
-  </p>
-
-  <p class="body-text">
-    She wore her <strong>French Resistance uniform</strong> — khaki jacket, military medals pinned across her chest. It was a deliberate statement: <em>I served this cause before it had a name. I put my life on the line. I am not just a celebrity showing up.</em>
-  </p>
-
-  <div class="pull-quote">
-    <p>"I have walked into the palaces of kings and queens and into the houses of presidents. And much more. But I could not walk into a hotel in America and get a cup of coffee, and that made me mad."</p>
-    <div class="attr">— Josephine Baker, March on Washington, August 28, 1963</div>
-  </div>
-
-  <p class="body-text">
-    She also told the crowd: <em>"I could go into any restaurant I wanted to, and I could drink water anyplace I wanted to, and I didn't have to go to a colored toilet either, and I have to tell you it was nice, and I got used to it, and I liked it, and I wasn't afraid anymore that someone would shout at me."</em> The crowd fell silent. Then roared.
-  </p>
-</div>
-
-<div class="page-break"></div>
-
-<!-- ══════════════════════════════════════════
-     7. THE RAINBOW TRIBE
-══════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-num">07</div>
-    <div class="section-meta">
-      <div class="section-eyebrow">Les Milandes Château · The Dordogne, France</div>
-      <h2>The Rainbow Tribe</h2>
-    </div>
-  </div>
-
-  <p class="body-text">
-    Baker conceived the Rainbow Tribe as a living experiment in human brotherhood. Rather than argue that people of different races, religions, and nationalities could coexist — she would simply <em>prove</em> it, in the most personal way imaginable. She purchased a 15th-century château called <strong>Les Milandes</strong> in the Dordogne valley of southwest France, opened it to paying tourists, and adopted twelve children from twelve countries, raised together under one roof.
-  </p>
-
-  <p class="body-text">
-    Each child was raised in their own religious tradition — Catholic, Protestant, Jewish, Muslim — as a deliberate statement that all faiths could share a home. The world watched, sometimes in admiration and sometimes in bewilderment, as Baker turned her personal life into a public argument against prejudice.
-  </p>
-
-  <div class="children-grid">
-    <div class="child-card"><div class="child-flag">🇯🇵</div><div class="child-name">Akio</div><div class="child-country">Japan</div></div>
-    <div class="child-card"><div class="child-flag">🇯🇵</div><div class="child-name">Janot</div><div class="child-country">Japan</div></div>
-    <div class="child-card"><div class="child-flag">🇨🇴</div><div class="child-name">Luis</div><div class="child-country">Colombia</div></div>
-    <div class="child-card"><div class="child-flag">🇫🇮</div><div class="child-name">Jari</div><div class="child-country">Finland</div></div>
-    <div class="child-card"><div class="child-flag">🇫🇷</div><div class="child-name">Jean-Claude</div><div class="child-country">France</div></div>
-    <div class="child-card"><div class="child-flag">🇮🇱</div><div class="child-name">Moïse</div><div class="child-country">Israel · Jewish</div></div>
-    <div class="child-card"><div class="child-flag">🇩🇿</div><div class="child-name">Brahim</div><div class="child-country">Algeria · Muslim</div></div>
-    <div class="child-card"><div class="child-flag">🇫🇷</div><div class="child-name">Marianne</div><div class="child-country">France</div></div>
-    <div class="child-card"><div class="child-flag">🇨🇮</div><div class="child-name">Koffi</div><div class="child-country">Ivory Coast</div></div>
-    <div class="child-card"><div class="child-flag">🇻🇪</div><div class="child-name">Mara</div><div class="child-country">Venezuela</div></div>
-    <div class="child-card"><div class="child-flag">🇫🇷</div><div class="child-name">Noël</div><div class="child-country">France · found abandoned</div></div>
-    <div class="child-card"><div class="child-flag">🇲🇦</div><div class="child-name">Stellina</div><div class="child-country">Morocco</div></div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     8. THE FALL & THE RISE
-══════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-num">08</div>
-    <div class="section-meta">
-      <div class="section-eyebrow">1969 · 1975</div>
-      <h2>The Fall. Then the Curtain Call.</h2>
-    </div>
-  </div>
-
-  <p class="body-text">
-    By the late 1960s, Baker's boundless generosity — combined with contractors who repeatedly defrauded her — had led to catastrophic debt. Les Milandes was sold at auction for a fraction of its value. In 1969, photographers captured Baker sitting alone on the château's front steps after her eviction, surrounded by her belongings. The image went around the world and shocked it.
-  </p>
-
-  <p class="body-text">
-    Her old friend Grace Kelly — now <strong>Princess Grace of Monaco</strong> — had never forgotten the woman who first befriended her at the Stork Club in 1951. She arranged for Baker and all twelve children to be given a villa on the French Riviera in Roquebrune-Cap-Martin. Baker was not homeless. She was not alone.
-  </p>
-
-  <p class="body-text">
-    On <strong>April 8, 1975</strong>, Josephine Baker opened a grand comeback show at the Bobino Theater in Paris, tracing fifty years of her career in a single night. She was 68. The reviews were ecstatic. Paris gave her a standing ovation that felt like the entire city exhaling at once.
-  </p>
-
-  <div class="pull-quote">
-    <p>Four days after the triumph — on April 12, 1975 — Baker was found unresponsive in her Paris apartment. She died of a cerebral hemorrhage. She was 68 years old.</p>
-    <div class="attr">France gave her a state funeral — the first American-born woman in French history to receive one. 20,000 people lined the streets of Paris.</div>
-  </div>
-</div>
-
-<div class="page-break"></div>
-
-<!-- ══════════════════════════════════════════
-     9. THE PANTHÉON
-══════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-num">09</div>
-    <div class="section-meta">
-      <div class="section-eyebrow">November 30, 2021</div>
-      <h2>Inducted into the Panthéon</h2>
-    </div>
-  </div>
-
-  <p class="body-text">
-    The Panthéon is France's national mausoleum — the resting place of its greatest heroes: Voltaire, Rousseau, Victor Hugo, Marie Curie. On November 30, 2021, French President Emmanuel Macron presided over the induction of its newest honoree. Soldiers carried her cenotaph draped in the French tricolor up the steps along a red carpet as the military band played.
-  </p>
-
-  <ul class="firsts-list">
-    <li>First <strong>Black woman</strong> ever admitted to the Panthéon</li>
-    <li>First <strong>American</strong> (of any race) ever admitted to the Panthéon</li>
-    <li>First <strong>performing artist</strong> ever admitted to the Panthéon</li>
-    <li>The <strong>sixth woman</strong> admitted in the institution's entire history</li>
-    <li>Her symbolic coffin holds soil from <strong>three places</strong>: St. Louis (her birthplace), Paris (her adopted home), and Monaco (where she is buried — per her family's wishes, her remains will stay there)</li>
-  </ul>
-
-  <div class="pull-quote">
-    <p>"A war heroine, fighter, dancer, singer — a Black person defending Black people, but first and foremost a woman defending humans."</p>
-    <div class="attr">— President Emmanuel Macron, Panthéon induction ceremony, November 30, 2021</div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     10. THINGS WORTH KNOWING
-══════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-num">10</div>
-    <div class="section-meta">
-      <div class="section-eyebrow">The Details That Make Her Real</div>
-      <h2>Things Worth Knowing</h2>
-    </div>
-  </div>
-
-  <div class="fact-grid">
-    <div class="fact-box">
-      <div class="fact-box-label">The Pet Cheetah</div>
-      <p>Baker owned a cheetah named <b>Chiquita</b> who wore a diamond collar, traveled the world with her, slept in her bed, and regularly appeared on stage at the Folies Bergère — escaping into the orchestra pit and terrorizing the musicians, which only made the show more legendary.</p>
-    </div>
-    <div class="fact-box">
-      <div class="fact-box-label">She Also Had a Pig Named Albert</div>
-      <p>At various points Baker also kept a chimpanzee, a snake, a goat who lived in her nightclub dressing room, and a pig named Albert who grew so large from eating in the kitchen that <b>the kitchen doorframe had to be demolished</b> to get him out.</p>
-    </div>
-    <div class="fact-box">
-      <div class="fact-box-label">1,500+ Marriage Proposals</div>
-      <p>Baker was married four times — twice before she was legally an adult — and is estimated to have received over <b>1,500 marriage proposals</b> in her lifetime. She reportedly found most of them amusing.</p>
-    </div>
-    <div class="fact-box">
-      <div class="fact-box-label">The Timing of Her Death</div>
-      <p>She died four days after the greatest critical triumph of her late career. She had just proven, at 68, that she could still command a stage completely. The timing gives her story the quality of myth: she went out on top, at full volume, with Paris on its feet.</p>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     TIMELINE
-══════════════════════════════════════════ -->
-<div class="section">
-  <div class="section-header">
-    <div class="section-num"></div>
-    <div class="section-meta">
-      <div class="section-eyebrow">Her Life at a Glance</div>
-      <h2>Timeline</h2>
-    </div>
-  </div>
-
-  <div class="timeline">
-    <div class="tl-row">
-      <div class="tl-year">1906</div>
-      <div class="tl-spine"><div class="tl-dot"></div><div class="tl-spine-line"></div></div>
-      <div class="tl-text"><div class="tl-title">Born in St. Louis, Missouri</div><div class="tl-desc">Born Freda Josephine McDonald. Grows up in poverty without indoor plumbing.</div></div>
-    </div>
-    <div class="tl-row">
-      <div class="tl-year">1917</div>
-      <div class="tl-spine"><div class="tl-dot"></div><div class="tl-spine-line"></div></div>
-      <div class="tl-text"><div class="tl-title">The East St. Louis Race Riots</div><div class="tl-desc">Age 11. Witnesses one of the deadliest episodes of racial violence in American history.</div></div>
-    </div>
-    <div class="tl-row">
-      <div class="tl-year">1921</div>
-      <div class="tl-spine"><div class="tl-dot"></div><div class="tl-spine-line"></div></div>
-      <div class="tl-text"><div class="tl-title">Breaks into Shuffle Along on Broadway</div><div class="tl-desc">Memorizes every role without being asked. Steps in for an ill performer. Gets the job.</div></div>
-    </div>
-    <div class="tl-row">
-      <div class="tl-year">1925</div>
-      <div class="tl-spine"><div class="tl-dot"></div><div class="tl-spine-line"></div></div>
-      <div class="tl-text"><div class="tl-title">La Revue Nègre — Paris erupts</div><div class="tl-desc">Age 19. Debuts at the Théâtre des Champs-Élysées. Signed to headline the Folies Bergère before the night is over.</div></div>
-    </div>
-    <div class="tl-row">
-      <div class="tl-year">1927</div>
-      <div class="tl-spine"><div class="tl-dot"></div><div class="tl-spine-line"></div></div>
-      <div class="tl-text"><div class="tl-title">First Black woman to star in a major film</div><div class="tl-desc">Siren of the Tropics. Hollywood had no interest. France did.</div></div>
-    </div>
-    <div class="tl-row">
-      <div class="tl-year">1937</div>
-      <div class="tl-spine"><div class="tl-dot"></div><div class="tl-spine-line"></div></div>
-      <div class="tl-text"><div class="tl-title">Becomes a French citizen</div><div class="tl-desc">Renounces American citizenship. France gave her what America refused.</div></div>
-    </div>
-    <div class="tl-row">
-      <div class="tl-year">1939</div>
-      <div class="tl-spine"><div class="tl-dot"></div><div class="tl-spine-line"></div></div>
-      <div class="tl-text"><div class="tl-title">Recruited as a WWII intelligence operative</div><div class="tl-desc">Uses celebrity as cover. Smuggles classified documents across borders in her sheet music and lingerie.</div></div>
-    </div>
-    <div class="tl-row">
-      <div class="tl-year">1951</div>
-      <div class="tl-spine"><div class="tl-dot"></div><div class="tl-spine-line"></div></div>
-      <div class="tl-text"><div class="tl-title">Stork Club incident. NAACP Day declared.</div><div class="tl-desc">Refused service. Files a public complaint. Grace Kelly walks out in solidarity. The NAACP honors her.</div></div>
-    </div>
-    <div class="tl-row">
-      <div class="tl-year">1957</div>
-      <div class="tl-spine"><div class="tl-dot"></div><div class="tl-spine-line"></div></div>
-      <div class="tl-text"><div class="tl-title">Awarded the Légion d'Honneur & Croix de Guerre</div><div class="tl-desc">France's highest military and civilian honors, for her service in WWII.</div></div>
-    </div>
-    <div class="tl-row">
-      <div class="tl-year">1963</div>
-      <div class="tl-spine"><div class="tl-dot"></div><div class="tl-spine-line"></div></div>
-      <div class="tl-text"><div class="tl-title">Only official female speaker at the March on Washington</div><div class="tl-desc">Speaks in her French Resistance uniform. Immediately before "I Have a Dream."</div></div>
-    </div>
-    <div class="tl-row">
-      <div class="tl-year">1969</div>
-      <div class="tl-spine"><div class="tl-dot"></div><div class="tl-spine-line"></div></div>
-      <div class="tl-text"><div class="tl-title">Loses Les Milandes. Evicted.</div><div class="tl-desc">Princess Grace of Monaco gives Baker and her 12 children a home on the French Riviera.</div></div>
-    </div>
-    <div class="tl-row">
-      <div class="tl-year">1975</div>
-      <div class="tl-spine"><div class="tl-dot"></div><div class="tl-spine-line"></div></div>
-      <div class="tl-text"><div class="tl-title">Comeback show. Standing ovation. Death four days later.</div><div class="tl-desc">April 8: greatest late-career triumph. April 12: found unresponsive. Age 68. State funeral in Paris. 20,000 people in the streets.</div></div>
-    </div>
-    <div class="tl-row">
-      <div class="tl-year">2021</div>
-      <div class="tl-spine"><div class="tl-dot"></div></div>
-      <div class="tl-text"><div class="tl-title">Inducted into the Panthéon</div><div class="tl-desc">First Black woman, first American, first performer ever admitted. Among Voltaire, Hugo, Curie.</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     CLOSING
-══════════════════════════════════════════ -->
-<div class="closing">
-  <div class="closing-quote">
-    "Surely the day will come when color means nothing more than skin tone, when religion is seen uniquely as a way to speak one's soul; when birth places have the weight of a throw of the dice and all men are born free, when understanding breeds love and brotherhood."
-  </div>
-  <div class="closing-attr">— Josephine Baker</div>
-  <div class="closing-badge">Women's History Month · 2025 &nbsp;·&nbsp; Josephine Baker · 1906–1975</div>
-</div>
+  // Init progress
+  goTo(0);
+</script>
 
 </body>
 </html>
