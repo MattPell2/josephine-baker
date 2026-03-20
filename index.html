@@ -353,6 +353,74 @@
     font-weight: 400;
   }
 
+  /* ── Photos ──────────────────────────────────────────────── */
+  .cover-photo {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    border: 3px solid var(--gold);
+    margin: 28px auto 0;
+    display: block;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  }
+
+  .photo {
+    margin: 24px 0;
+    page-break-inside: avoid;
+  }
+
+  .photo img {
+    width: 100%;
+    display: block;
+    border-radius: 4px;
+    object-fit: cover;
+    max-height: 380px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  }
+
+  .photo-caption {
+    font-size: 8pt;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-top: 8px;
+    font-style: italic;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .photo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 24px 0;
+    page-break-inside: avoid;
+  }
+
+  .photo-grid .photo { margin: 0; }
+
+  .photo-aside {
+    float: right;
+    width: 40%;
+    margin: 4px 0 20px 28px;
+    page-break-inside: avoid;
+  }
+
+  .photo-aside img {
+    width: 100%;
+    display: block;
+    border-radius: 4px;
+    object-fit: cover;
+    object-position: center top;
+    max-height: 260px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  }
+
+  .photo-aside .photo-caption { text-align: left; }
+
+  .clearfix::after { content: ''; display: table; clear: both; }
+
   /* ── Page break helpers ──────────────────────────────────── */
   .page-break { page-break-after: always; }
   .no-break   { page-break-inside: avoid; }
@@ -476,6 +544,7 @@
   </div>
   <div class="cover-dates">June 3, 1906 — April 12, 1975</div>
   <div class="cover-rule"><span>✦</span></div>
+  <img src="_img/portrait.jpg" class="cover-photo" alt="Josephine Baker">
   <div class="cover-tags">
     <span class="tag">Performer</span>
     <span class="tag">WWII Spy</span>
@@ -501,6 +570,10 @@
     </div>
   </div>
 
+  <div class="photo-aside">
+    <img src="_img/young.jpg" alt="Young Josephine Baker">
+    <div class="photo-caption">Josephine Baker in her early years as a performer</div>
+  </div>
   <p class="body-text">
     Josephine Baker was born <strong>Freda Josephine McDonald</strong> on June 3, 1906, in the Chestnut Valley neighborhood of St. Louis — a low-income district of rooming houses and railroad yards without indoor plumbing. Her mother, Carrie McDonald, was a washerwoman who had abandoned her own dreams of performing. Her father, Eddie Carson, a vaudeville drummer, abandoned the family shortly after Josephine's birth.
   </p>
@@ -513,6 +586,7 @@
     She was married for the first time at <strong>13</strong>. Then again at approximately <strong>15</strong>, to a railroad worker named Willie Baker, whose surname she kept for the rest of her life. She ran away from home, performed on the streets of St. Louis, and talked her way into a touring vaudeville troupe by quietly memorizing every role — then stepping in when an actress fell ill during a Boston run of <em>Shuffle Along</em> (1921), the landmark all-Black Broadway musical.
   </p>
 
+  <div class="clearfix"></div>
   <div class="stats-row">
     <div class="stat-box">
       <div class="stat-num">8</div>
@@ -552,6 +626,17 @@
   <p class="body-text">
     The following year, 1926, she debuted her most iconic look: a girdle of <strong>sixteen drooping artificial bananas</strong> at the Folies Bergère — accompanied by her pet cheetah, Chiquita, on a diamond leash. The image became one of the most reproduced in 20th-century entertainment history. The French press gave her four nicknames: <em>La Vénus Noire, La Perle Noire, La Vénus de Bronze,</em> and <em>La Déesse Créole</em>.
   </p>
+
+  <div class="photo-grid">
+    <div class="photo">
+      <img src="_img/banana.jpg" alt="Josephine Baker in her iconic banana skirt at the Folies Bergère">
+      <div class="photo-caption">The banana skirt, Folies Bergère — the most reproduced image in 20th-century entertainment</div>
+    </div>
+    <div class="photo">
+      <img src="_img/glamour.jpg" alt="Josephine Baker glamour portrait">
+      <div class="photo-caption">La Vénus Noire — Paris made her a global icon overnight</div>
+    </div>
+  </div>
 
   <div class="pull-quote">
     <p>"In America, I had to go to the back door. In Paris, I walked through the front — and they gave me the whole building."</p>
@@ -624,12 +709,18 @@
     She attended glamorous parties thrown by German, Italian, and Japanese officials in Paris, eavesdropping on conversations and extracting military intelligence while everyone asked for her autograph. She then carried classified information written in <strong>invisible ink on her sheet music</strong>, smuggled across international borders in her lingerie, pinned to her underwear, written on her hands. Border guards fawned over her at every crossing — they never searched her. She smuggled over 50 classified documents this way.
   </p>
 
+  <div class="photo-aside">
+    <img src="_img/1948.jpg" alt="Josephine Baker, circa 1948">
+    <div class="photo-caption">Baker during the WWII era — celebrated performer by day, intelligence operative by night</div>
+  </div>
+
   <div class="pull-quote">
     <p>"Who would dare strip-search Josephine Baker?"</p>
     <div class="attr">— Baker to her intelligence handler Jacques Abtey. She was right every single time.</div>
   </div>
 
   <p class="body-text">
+    <div class="clearfix"></div>
     Intelligence Baker gathered about Axis troop positions, coastal geography, and beach defenses in North Africa helped support <strong>Operation Torch</strong> — the Allied invasion of North Africa in November 1942. In May 1944, she was formally commissioned as a <strong>Sub-Lieutenant in the French Women's Auxiliary Air Force</strong> — making her a genuine military officer, not just a supporter.
   </p>
 
@@ -742,6 +833,11 @@
     Each child was raised in their own religious tradition — Catholic, Protestant, Jewish, Muslim — as a deliberate statement that all faiths could share a home. The world watched, sometimes in admiration and sometimes in bewilderment, as Baker turned her personal life into a public argument against prejudice.
   </p>
 
+  <div class="photo">
+    <img src="_img/milandes.jpg" alt="Les Milandes château, Dordogne, France" style="max-height:280px;">
+    <div class="photo-caption">Les Milandes — Baker's 15th-century château in the Dordogne valley, home to the Rainbow Tribe</div>
+  </div>
+
   <div class="children-grid">
     <div class="child-card"><div class="child-flag">🇯🇵</div><div class="child-name">Akio</div><div class="child-country">Japan</div></div>
     <div class="child-card"><div class="child-flag">🇯🇵</div><div class="child-name">Janot</div><div class="child-country">Japan</div></div>
@@ -781,6 +877,11 @@
   <p class="body-text">
     On <strong>April 8, 1975</strong>, Josephine Baker opened a grand comeback show at the Bobino Theater in Paris, tracing fifty years of her career in a single night. She was 68. The reviews were ecstatic. Paris gave her a standing ovation that felt like the entire city exhaling at once.
   </p>
+
+  <div class="photo">
+    <img src="_img/late.jpg" alt="Josephine Baker in her later years" style="max-height:320px;">
+    <div class="photo-caption">Baker in later life — still commanding every room she entered</div>
+  </div>
 
   <div class="pull-quote">
     <p>Four days after the triumph — on April 12, 1975 — Baker was found unresponsive in her Paris apartment. She died of a cerebral hemorrhage. She was 68 years old.</p>
